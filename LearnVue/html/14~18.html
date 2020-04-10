@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css">
+			.dasima {
+				border: 10px solid aquamarine;
+				width: 200px;
+				height: 200px;
+			}
+
+			.deyunse {
+				width: 200px;
+				height: 200px;
+				background-color: cornflowerblue;
+			}
+			
+			.text {
+				color: white;
+				font-weight: 500;
+				font-size: 23px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 属性绑定 -->
+		<div id="app">
+			<a v-bind:href="url">百度</a>
+			<input type="button" v-on:click="alterUrl" value="修改URL" />
+			<br />
+			<br />
+			<div v-text="data"></div>
+			<input type="text" v-bind:value="data" v-on:input="input" />
+			<input type="text" v-bind:value="data" v-on:input="data=$event.target.value" />
+			<input type="text" v-model="data" />
+			<!-- 			v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件：
+				text 和 textarea 元素使用 value 属性和 input 事件； -->
+			<br />
+			<br />
+			<!-- 样式绑定 -->
+			<div v-bind:class="{dasima:isDasima,deyunse:isDeyunse}"></div>
+			<!-- 控制属性 class=“d”是否添加到该div中 -->
+			<button v-on:click="switchOver1">切换边框</button>
+			<button v-on:click="switchOver2">切换颜色</button>
+			<br />
+			<br />
+			<!-- 数组形式，可以和对象形式结合使用 -->
+			<div v-bind:class='[dasimaClass,deyunseClass,{text:isText}]'>近 平 登 基</div>
+			<!-- 控制属性 class=“d”是否添加到该div中 -->
+			<button v-on:click="switchOver3">去掉边框</button>
+			<button v-on:click="switchOver4">复原边框</button>
+			<button v-on:click="switchOver5">去掉颜色</button>
+			<button v-on:click="switchOver6">复原颜色</button>
+			<button v-on:click="switchOver7">切换文字样式</button>
+			<br />
+			<br />
+			<!-- 可读性优化，数组形式 -->
+			<div v-bind:class="classesArr">末 代 皇 帝</div>
+			<!-- 再通过JS数组的API来控制 -->
+			<br />
+			<br />
+			<!-- 对象模式 -->
+			<div v-bind:class="classesObj">我就要洗劫天空殿</div>
+			<button v-on:click="switchOver8">洗劫天空殿</button>
+			<br />
+			<br />
+			<div v-bind:style="{border:borderStyle,width:widthStyle,height:heightStyle}"></div>
+			<button v-on:click="switchOver9">切换</button>
+			<br />
+			<br />
+			<div v-bind:style="stylesObj"></div>
+			<button v-on:click="switchOver10">切换</button>
+			<br />
+			<br />
+			<div v-bind:style="[stylesObj,overrides]"></div>
+			<button v-on:click="switchOver10">切换</button>
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					url: 'http://www.baidu.com',
+					data: '呵呵哈哈',
+					isDasima: true,
+					isDeyunse: true,
+					dasimaClass: 'dasima',
+					deyunseClass: 'deyunse',
+					isText: true,
+					classesArr: ['dasima','deyunse','text'],
+					classesObj:{
+						dasima: true,
+						deyunse: true,
+						text: true
+					},
+					borderStyle:'10px solid #41B883',
+					heightStyle: '100px',
+					widthStyle: '300px',
+					stylesObj:{
+						border:'10px solid #41B883',
+						height: '100px',
+						width: '300px',
+					},
+					overrides:{
+						border:'10px solid orange',
+						background:'#D195FF',
+						height: '100px',
+						width: '300px',
+					}
+				},
+				methods: {
+					alterUrl: function() {
+						this.url = 'http://itcast.cn'
+					},
+					input: function(e) {
+						console.log(e)
+						this.data = e.target.value
+					},
+					switchOver1: function() {
+						this.isDasima = !this.isDasima
+					},
+					switchOver2: function() {
+						this.isDeyunse = !this.isDeyunse
+					},
+					switchOver3: function() {
+						this.dasimaClass = ''
+					},
+					switchOver4: function() {
+						this.dasimaClass = 'dasima'
+					},
+					switchOver5: function() {
+						this.deyunseClass = ''
+					},
+					switchOver6: function() {
+						this.deyunseClass = 'deyunse'
+					},
+					switchOver7: function() {
+						this.isText = !this.isText
+					},
+					switchOver8: function() {
+						this.classesObj.dasima=!this.classesObj.dasima
+						this.classesObj.deyunse=!this.classesObj.deyunse
+						this.classesObj.text=!this.classesObj.text
+					},
+					switchOver9: function() {
+						var v=''
+						v=this.heightStyle
+						this.heightStyle=this.widthStyle
+						this.widthStyle=v
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

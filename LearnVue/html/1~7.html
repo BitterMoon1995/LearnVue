@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css">
+			[v-clock] {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 数据绑定 -->
+		<div id="sima"></div>
+		
+		<div id="busima" v-cloak>{{msg}} {{xiaochuan+'--'+'确实'}} {{6323+1}}</div>
+		
+		<div v-cloak id="order">
+			<div>{{msg1}}</div>
+			
+			<div v-text="msg2"></div>
+			<!-- 更新元素的 textContent -->
+			
+			<div v-html="msg3"></div>
+			<!-- 更新元素的 innerHTML -->
+			
+			<div v-pre>{{msg1}}</div>
+			<!-- 跳过这个元素和它的子元素的编译过程。 -->
+			
+			<div v-once>{{msg4}}</div>
+			<!-- 只渲染元素和组件一次。这可以用于优化更新性能。 -->
+			
+			<div>
+				<div v-text="msg"></div>
+				<input type="text" v-model="msg" />
+				<!-- v-model双向数据绑定 -->
+			</div>
+		</div>
+		<script>
+			var msg = "笑川死妈"
+			var div = document.getElementById('sima')
+			div.innerHTML = msg
+
+			var vue1 = new Vue({
+				el: '#busima',
+				data: {
+					msg: 'hello vue',
+					xiaochuan: '笑川死了妈'
+				}
+			})
+			var vue2 = new Vue({
+				el: '#order',
+				data: {
+					msg: '',
+					msg1: '狗种死心留',
+					msg2: 'v-text不用考虑闪动',
+					msg3: '<h1>周神</h1>',
+					msg4: '非响应式'
+				}
+			})
+		</script>
+	</body>
+</html>

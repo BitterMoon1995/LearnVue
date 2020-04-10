@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<!-- 循 环 与 分 支 -->
+		<div id="app">
+			<div v-if="score>=90">牛牛</div>
+			<div v-else-if="score>=60">一般</div>
+			<div v-else>FIVE</div>
+			<!-- 条件渲染，相对样式的切换，DOM的变化性能开销很大 -->
+			<br />
+			<input v-model="score" />
+			<br />
+			<br />
+			<div v-show="isShow">近平是皇帝！！！</div>
+			<!-- display: none; -->
+			<br />
+			<br />
+			<ul>
+				<li v-for="(x,y) in phones">{{x+'---'+y}}</li>
+				<!-- phones 是源数据数组，而 x,y 则是被迭代的数组元素与索引の别名 -->
+			</ul>
+			<ul>
+				<li v-for="x in myPhones" v-bind:key='x.name'>{{x.name}}</li>
+			</ul>
+			<div>
+				<div v-for="(x,y,z) in people">{{x+' --- '+y+' --- '+z}}</div>
+			</div>
+			
+			<!-- 结合使用 -->
+			<ul>
+				<li v-for="x in myPhones" v-if="x.price<5000" v-bind:key='x.name'>{{x.name+'---'+x.price}}</li>
+			</ul>
+
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					score: 90,
+					isShow: false,
+					phones: ['小米10Pro', '三星S20', '花为P40Pro', '1+8T'],
+					myPhones: [{
+							name: '小米10Pro',
+							price: '4999',
+							facade: 85
+						},
+						{
+							name: '三星S20',
+							price: '6999',
+							facade: 90
+						},
+						{
+							name: '花为P40Pro',
+							price: '6488',
+							facade: 0
+						},
+						{
+							name: 'OppoFindX2Pro',
+							price: '6999',
+							facade: 86
+						}
+					],
+					people: {
+						name: '周雨薇',
+						gender: 'female',
+						beauty: '校花女神'
+					}
+				},
+				methods: {
+
+				}
+			})
+
+			var people = {
+				name: '周雨薇',
+				gender: 'female',
+				beauty: '校花女神'
+			}
+			for (let key in people) {
+				console.log(people[key])
+			}
+		</script>
+	</body>
+</html>

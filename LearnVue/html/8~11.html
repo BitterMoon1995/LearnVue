@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../js/vue.js"></script>
+	</head>
+	<body>
+		<!-- 事件绑定 -->
+		<div id="app">
+			<div>{{num}}</div>
+			<button v-on:click="num++">点鸡+1</button>
+			<button @click="num++">再点鸡+1</button>
+			<!-- 简化写法 -->
+			<br /><br />
+
+			<!-- 参数传递 -->
+			<button v-on:click="sub">点鸡-1</button>
+			<!-- 方式一会默认传递事件对象，但不能传其他参数 -->
+			<button @click="transmit(123,456,$event)">参数传递</button>
+			<!-- 方式二可以定制参数，
+			事件对象必须为最后一个参数前面加$名字叫event -->
+			<br /><br />
+
+			<!-- 事件冒泡 -->
+			<div @click="handle2">
+				<button @click.stop="handle1">点鸡+1</button>
+				<!-- .stop阻止腐化 -->
+			</div>
+			<a href="http://www.baidu.com" v-on:click.prevent="handle3">百度一下</a>
+		</div>
+		<br /><br />
+		<div id="app2">
+			<form>
+				用户名：<input type="text" v-model="uname" v-on:keyup.delete="del"/><br />
+				密码：<input type="text" v-model="pwd" v-on:keyup.enter="submit"/><br />
+				<!-- 在密码框内按下回车键即提交事件 -->
+				<input type="button" value="提交" v-on:click="submit"/><br />
+			</form>
+		</div>
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					num: 1
+				},
+				methods: {
+					sub: function(e) {
+						console.log(this === vm)
+						this.num--
+						console.log(e)
+					},
+					transmit: function(p1, p2, e) {
+						console.log(p1, p2)
+						console.log(p1 > p2)
+						console.log(e)
+						console.log(e.target.innerHTML)
+					},
+					handle1: function(e) {
+						// 阻止冒泡传统方案
+						// e.stopPropagation()
+						this.num++
+					},
+					handle2: function() {
+						this.num *= 2
+					},
+					handle3: function(e) {
+						//阻止默认事件JS方案
+						// e.preventDefault()
+					}
+				}
+			})
+			
+			var vm2 = new Vue({
+				el: '#app2',
+				data: {
+					uname:'',
+					pwd:''
+				},
+				methods: {
+					submit:function(){
+						console.log(this.uname,this.pwd)
+					},
+					del:function(){
+						this.uname=''
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css">
+			.tab div {
+				width: 500px;
+				height: 300px;
+				border: 1px solid black;
+				display: none;
+			}
+
+			/* 默认不显示，被选中就套用此类从而显示 */
+			.tab div.current {
+				display: block;
+			}
+
+			/* 标题被选中后套用此类，默认无样式 */
+			.active {
+				background-color: #317EF3;
+				color: white;
+			}
+
+			.tab div img {
+				width: 100%;
+				height: 100%;
+			}
+
+			.tab ul li {
+				box-sizing: border-box;
+				width: 100px;
+				height: 45px;
+				border: 1px solid black;
+				line-height: 45px;
+				text-align: center;
+				list-style: none;
+				float: left;
+				cursor: pointer;
+				user-select: none;
+				display: block;
+			}
+
+			.tab ul {
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="tab">
+				<ul>
+					<li v-for="(item,index) in list" :key='item.id'
+					v-bind:class="currentIndex==index?'active':''"
+					v-on:click="handleClick(index)">{{item.title}}</li>
+				</ul>
+				<div v-for="(item,index) in list" :key='item.id'
+					v-bind:class="currentIndex==index?'current':''">
+					<img v-bind:src="item.path" />
+				</div>
+			</div>
+		</div>
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					currentIndex: 0,//当前选中的索引
+					list: [{
+							id: 1,
+							title: 'lemon',
+							path: '../img/lemon.jpg'
+						},
+						{
+							id: 2,
+							title: 'strawberry',
+							path: '../img/strawberry.jpg'
+						},
+						{
+							id: 3,
+							title: 'cherry',
+							path: '../img/cherry.jpg'
+						}
+					]
+				},
+				methods: {
+					handleClick: function(index){
+						// 切换的本质:给元素套用类
+						this.currentIndex=index
+						console.log(index)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
