@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>侦听器、过滤器</title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<div id="app">
+			<div>
+				<span>名：</span>
+				<span>
+					<input type="text" v-model="firstName" />
+				</span>
+			</div>
+
+			<div>
+				<span>姓：</span>
+				<span>
+					<input type="text" v-model="lastName" />
+				</span>
+			</div>
+			<!-- 监听器，异步 -->
+			<div>{{fullName}}</div>
+			<div>{{name}}</div>
+			<br /><br />
+			<div>
+				<span>用户名：</span>
+				<span>
+					<input type="text" v-model.lazy="userName" />
+				</span>
+				<span>{{tip}}</span>
+			</div>
+			<br /><br />
+			<!-- 过滤器 -->
+			<div>
+				<span>Nigger Name：</span>
+				<span>
+					<input type="text" v-model="nigger" />
+					<!-- 过滤器可以级联，先执行第一个，结果返回给第二个再执行再返回 -->
+					<div>{{nigger|upper|lower}}</div>
+				</span>
+				<div v-bind:abc='nigger|lower'>过滤器绑定属性</div>
+			</div>
+			<br /><br />
+			<!-- 带参过滤器 -->
+			<div>{{date|dateFormat('yyyy-MM-dd')}}</div>
+		</div>
+		<script>
+			//过滤器，也要return一个结果。必须定义在Vue对象前
+			Vue.filter('upper',function(data){
+				return data.charAt(0).toUpperCase()+data.slice(1)
+			})
+			Vue.filter('lower',function(data){
+				return 'nigger：'+data
+			})
+			Vue.filter('dateFormat',function(data,args){
+				if(args=='yyyy-MM-dd'){
+					let date=''
+					date+=data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()
+					return date
+				}
+			})
+			var app = new Vue({
+				el: '#app',
+				data: {
+					firstName:'Lara',
+					lastName:'Croft',
+					fullName:'',
+					userName:'',
+					tip:'',
+					nigger:'',
+					date:new Date()
+				},
+				methods: {
+					checkName:function(userName){
+						let that=this
+						//模拟后台接口调用
+						setTimeout(function () {
+							if (userName==='admin')
+								that.tip='用户名已存在'
+							else that.tip='用户名可以使用'
+						},1000)
+					}
+				},
+				//侦听器
+				watch:{
+					firstName:function(value){
+						this.fullName=value+' '+this.lastName
+					},
+					lastName:function(value){
+						this.fullName=this.firstName+' '+value
+					},
+					userName:function(value){
+						this.checkName(value)
+						this.tip='正在验证...'
+					}
+				},
+				computed:{
+					name:function(){
+						return this.firstName+' '+this.lastName
+					}
+				},
+				//局部过滤器
+				filters:{
+					blackNigger:function(data){
+						return 'blackNigger '+data
+					}
+				}
+			})
+			
+		</script>
+	</body>
+</html>

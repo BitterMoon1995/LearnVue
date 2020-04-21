@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件数据交互</title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<div id="app">
+			<div>{{pmsg}}</div>
+			<br />
+			<!-- 父组件通过属性给子组件传递数据 -->
+			<son-nigger title="非洲尼哥:"></son-nigger>
+			<br />
+			<son-nigger v-bind:title="title"></son-nigger>
+			<br />
+			<!-- 传递数值类型 -->
+			<son-nigger v-bind:num='num'></son-nigger>
+			<br />
+			<son-nigger v-bind:fruits='fruits'></son-nigger>
+			<br />
+			<son-nigger v-bind:girl='girl'></son-nigger>
+			<br />
+			<!-- 父组件监听子组件的事件并实现对应的处理方法 -->
+			<the-fruits :fruits='fruits' @expand='expand' :style="{fontSize:fontSize+'px'}"></the-fruits>
+		</div>
+		
+		<script>
+			Vue.component('son-nigger', {
+				// 子组件通过props接受数据
+				props:['title','num','fruits','girl'],
+				data: function() {
+					return {
+						msg:'黑 色 小 尼 哥'
+					}
+				},
+				template:`
+					<div>
+						<div>{{title+' '+msg}}</div>
+						<div>{{num===undefined?'':'Niger数量:'+num}}</div>
+						<div>{{fruits===undefined?'':'水果:'+fruits}}</div>
+						<div>{{girl===undefined?'':'姓名:'+girl.name+'  年龄:'+girl.age}}</div>
+					</div>
+				`
+			})
+			Vue.component('the-fruits', {
+				props:['fruits'],
+				template:`
+					<div>
+						<ul>
+							<li v-for="x in fruits">{{x}}</li>
+						</ul>
+						<!-- 子组件通过自定义事件向父组件传递数据-->
+						<!--  $emit为固定写法-->
+						<button @click="$emit('expand')">放大父组件中的字体</button>
+					</div>
+				`
+			})
+			var app = new Vue({
+				el: '#app',
+				data: {
+					pmsg:'黑 奴 大 尼 哥',
+					title:'死妈尼哥儿:',
+					num:37,
+					fruits:['strawberry','cherry','mango'],
+					girl:{
+						name:'薇儿',
+						age:17
+					},
+					fontSize:10
+				},
+				methods: {
+					expand:function(){
+						this.fontSize+=2
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

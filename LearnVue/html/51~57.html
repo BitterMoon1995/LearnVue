@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件の注册</title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<div id="app">
+			<button-counter></button-counter>
+			<!-- 数据相互独立 -->
+			<button-counter></button-counter>
+			<button-counter></button-counter>
+			<br />
+			<!-- 驼峰式命名的组件要放在页面中，必须改用短横线式声明 -->
+			<!-- <HelloNigger></HelloNigger> -->
+			<hello-nigger></hello-nigger>
+			<br />
+			<dead-nigger></dead-nigger>
+		</div>
+		<script>
+			// 注册自定义组件
+			// 组件命名方式只能为短横线或驼峰式
+			Vue.component('button-counter', {
+				//data必须是一个函数(闭包)
+				data: function() {
+					return {
+						count: 0
+					}
+				},
+				//组件的模板必须包含一个确切的根元素
+				// template:'<div><button v-on:click="handle">点鸡了{{count}}次</button><button>兄弟元素</button></div>',
+				//模板的内容可以是模板字符串
+				template: `  
+					<div>
+						<button v-on:click="handle">点鸡了{{count}}次</button>
+						<button>兄弟元素</button>
+						<HelloNigger></HelloNigger>
+					</div>
+				`,
+				methods: {
+					handle: function() {
+						this.count++
+					}
+				}
+			})
+			//驼峰式
+			Vue.component('HelloNigger', {
+				data: function() {
+					return {
+						msg:'BlackNiggerDeathMom'
+					}
+				},
+				template:`
+					<div>
+						<div>{{msg}}</div>
+						<!--局部组件不能放在其他组件中，只能放在其父组件中-->
+						<!--<dead-nigger></dead-nigger>-->
+					</div>
+				`
+			})
+			
+			//外部定义局部组件对象
+			var deadNigger={
+				data:function() {
+					return {
+						msg:'死nigger,好nigger'
+					}
+				},
+				template:'<div>{{msg}}</div>'
+			}
+			
+			var app = new Vue({
+				el: '#app',
+				data: {
+
+				},
+				methods: {
+
+				},
+				//定义局部组件
+				components:{
+					'dead-nigger':deadNigger
+				}
+			})
+		</script>
+	</body>
+</html>
