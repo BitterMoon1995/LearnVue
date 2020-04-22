@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="../js/vue.js"></script>
+		<title>自定义指令、计算属性</title>
+	</head>
+	<body>
+		<div id="app">
+			<span>变装：</span>
+			<input type="text" v-focus />
+			<br />
+			<br />
+			<div style="width: 200px;height: 200px;border: #317EF3 1px solid;" v-color='color'></div>
+			<br />
+			<br />
+			<div>{{msg}}</div>
+			<div>{{msg.split('').reverse().join('')}}</div>
+			<!-- 直接绑定函数名 -->
+			<div>{{reverseStr}}</div>
+			<div>{{reverseStr}}</div>
+			<div>{{reverseStr}}</div>
+			<div>{{reverseStr2()}}</div>
+			<div>{{reverseStr2()}}</div>
+			<div>{{reverseStr2()}}</div>
+		</div>
+		<script>
+			//带参
+			Vue.directive('focus', {
+				inserted: function(el) {
+					el.focus()
+				}
+			})
+			//不带参
+			Vue.directive('color', {
+				bind: function(el, bindind) {
+					el.style.background = bindind.value
+				}
+			})
+			var app = new Vue({
+				el: '#app',
+				data: {
+					color: 'red',
+					msg: '卓行人'
+				},
+				methods: {
+					//计算属性和方法的区别：
+					//计算属性基于他们的依赖（data中的某一数据）进行缓存
+					//方法不存在缓存
+					reverseStr2: function() {
+						console.log('black nigger!')
+						return this.msg.split('').reverse().join('')
+					}
+				},
+				//注册局部指令，只能在本组件中使用
+				directives: {
+					color2: {
+						bind: function(el, binding) {
+							el.style.background = bindind.value
+						}
+					}
+				},
+				//计算属性
+				computed: {
+					reverseStr: function() {
+						console.log('really nigger?')
+						return this.msg.split('').reverse().join('')
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

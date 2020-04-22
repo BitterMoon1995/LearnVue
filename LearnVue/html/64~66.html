@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件插槽</title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css">
+			.current{
+				color: #B10724;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<the-fairy>有狗</the-fairy>
+			<the-fairy></the-fairy>
+			<br />
+			<!-- 具名插槽 -->
+			<had-name>
+				<p slot='header'>狗种</p>
+				<p>狗种死心流</p>
+				<p>狗种死心流</p>
+				<p slot='footer'>死心流</p>
+			</had-name>
+			<!-- template实现一个插槽填充多个标签 -->
+			<had-name>
+				<template slot="header">
+					<p>狗种</p>
+					<p>狗种</p>
+					<strong>狗种死心流哈哈哈哈</strong>
+				</template>
+			</had-name>
+			<br />
+			<!-- 作用域插槽  父组件通过slot-scope获取子组件数据并进行处理-->
+			<fruits :list='list'>
+				<template slot-scope='godz'>
+					<strong v-if="godz.subData.id===2" class="current">
+						{{godz.subData.name}}
+					</strong>
+					<strong v-else>{{godz.subData.name}}</strong>
+				</template>
+			</fruits>
+		</div>
+		
+		
+		<script>
+			Vue.component('the-fairy',{
+				template:`
+					<div>
+						<strong>ERROR:</strong>
+						<!-- 插槽 -->
+						<slot>默认数据</slot>
+					</div>
+				`
+			})
+			// 具名插槽
+			Vue.component('had-name',{
+				template:`
+					<div>
+						<header>
+							<strong>HEADER:</strong>
+							<slot name='header'></slot>
+						</header>
+						<main>
+							<strong>MAIN:</strong>
+							<slot></slot>
+						</main>
+						<footer>
+							<strong>FOOTER:</strong>
+							<slot name='footer'></slot>
+						</footer>
+					</div>
+				`
+			})
+			// 作用域插槽
+			Vue.component('fruits',{
+				props:['list'],
+				template:`
+					<ul>
+						<li v-for="item in list" :key=item.id>
+						<!--通过slot标签中绑定自定义属性传数据给父组件，属性的值就是要传递的数据-->
+							<slot :subData='item'>{{item.name}}</slot>
+						</li>
+					</ul>
+				`
+			})
+			
+			var app = new Vue({
+				el: '#app',
+				data: {
+					list:[
+					{
+						id:1,
+						name:'strawberry'
+					},
+					{
+						id:2,
+						name:'cherry'
+					},
+					{
+						id:3,
+						name:'mango'
+					}
+					]
+				},
+				methods: {
+
+				}
+			})
+		</script>
+	</body>
+</html>
