@@ -10,11 +10,12 @@
 		<div id="app">
 			<div>{{pmsg}}</div>
 			<br />
-			<!-- 父组件通过属性给子组件传递数据 -->
+			<!-- 父组件通过属性绑定给子组件传递数据 -->
 			<son-nigger title="非洲尼哥:"></son-nigger>
 			<br />
 			<son-nigger v-bind:title="title"></son-nigger>
 			<br />
+			
 			<!-- 传递数值类型 -->
 			<son-nigger v-bind:num='num'></son-nigger>
 			<br />
@@ -22,8 +23,17 @@
 			<br />
 			<son-nigger v-bind:girl='girl'></son-nigger>
 			<br />
-			<!-- 父组件监听子组件的事件并实现对应的处理方法 -->
-			<the-fruits :fruits='fruits' @expand='expand' :style="{fontSize:fontSize+'px'}"></the-fruits>
+			
+			<!-- 父组件实现子组件的自定义事件，通过$event接收$emit抛出的数据(子向父) -->
+		<!-- 	在原生事件中，$event是事件对象
+			在自定义事件中，$event是传递过来的数据 -->
+			<the-fruits :fruits='fruits' @expand='expand($event)' :style="{fontSize:fontSize+'px'}"></the-fruits>
+			
+			<!-- 兄弟组件通信 -->
+			<old-brother></old-brother>
+			<young-brother></young-brother>
+			<br />
+			<div><button @click='destroy'>销毁事件</button></div>
 		</div>
 		
 		<script>
@@ -44,6 +54,11 @@
 					</div>
 				`
 			})
+			
+			//子组件通过自定义事件向父组件传递数据-->
+			//$emit:写在子组件，用于触发父组件的事件
+			//第一个参数指定要触发的当前实例的事件，
+			//第二个参数是传递的数据-->
 			Vue.component('the-fruits', {
 				props:['fruits'],
 				template:`
@@ -51,12 +66,65 @@
 						<ul>
 							<li v-for="x in fruits">{{x}}</li>
 						</ul>
-						<!-- 子组件通过自定义事件向父组件传递数据-->
-						<!--  $emit为固定写法-->
-						<button @click="$emit('expand')">放大父组件中的字体</button>
+						<button @click="$emit('expand',2)">放大父组件中的字体</button>
 					</div>
 				`
 			})
+			
+			//兄弟组件通过公共的组件中心传值
+			Vue.component('old-brother',{
+				data:function(){
+					return {
+						num:4397
+					}
+				},
+				template:`
+					<div>
+						<div>死妈明凯:{{num}}</div>
+						<div><button @click="handle">明凯</button></div>
+					</div>
+				`,
+				methods:{
+					//本组件的点击事件触发后，调用回调函数通过事件中心来触发兄弟组件的事件
+					handle:function(){
+						eventCenter.$emit('ybevent',1)
+					}
+				},
+				//实例被挂载后调用钩子函数mounted
+				mounted:function(){
+					//$on:监听当前实例上的自定义事件,第二个参数为对应的回调函数
+					eventCenter.$on('obevent',val=>{
+						this.num-=val
+					})
+				}
+			})
+			Vue.component('young-brother',{
+				data:function(){
+					return {
+						num:2800
+					}
+				},
+				template:`
+					<div>
+						<div>死妈自豪:{{num}}</div>
+						<div><button @click="handle">自豪</button></div>
+					</div>
+				`,
+				methods:{
+					handle:function(){
+						eventCenter.$emit('obevent',3)
+					}
+				},
+				mounted:function(){
+					eventCenter.$on('ybevent',val=>{
+						this.num+=val
+					})
+				}
+			})
+			var eventCenter=new Vue({
+				
+			})
+			
 			var app = new Vue({
 				el: '#app',
 				data: {
@@ -71,11 +139,17 @@
 					fontSize:10
 				},
 				methods: {
-					expand:function(){
-						this.fontSize+=2
+					//给事件函数添加参数，该参数自动就是子组件传过来的值
+					expand:function(val){
+						this.fontSize+=val
+					},
+					destroy:function(){
+						eventCenter.$off('ybevent')
+						eventCenter.$off('obevent')
 					}
 				}
 			})
 		</script>
+
 	</body>
 </html>

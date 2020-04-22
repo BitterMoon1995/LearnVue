@@ -39,6 +39,8 @@
 				text 和 textarea 元素使用 value 属性和 input 事件； -->
 			<br />
 			<br />
+			
+			
 			<!-- 样式绑定 -->
 			<div v-bind:class="{dasima:isDasima,deyunse:isDeyunse}"></div>
 			<!-- 控制属性 class=“d”是否添加到该div中 -->
@@ -70,12 +72,12 @@
 			<button v-on:click="switchOver9">切换</button>
 			<br />
 			<br />
-			<div v-bind:style="stylesObj"></div>
+<!-- 			<div v-bind:style="stylesObj"></div>
 			<button v-on:click="switchOver10">切换</button>
 			<br />
 			<br />
 			<div v-bind:style="[stylesObj,overrides]"></div>
-			<button v-on:click="switchOver10">切换</button>
+			<button v-on:click="switchOver10">切换</button> -->
 		</div>
 		<script>
 			var app = new Vue({
