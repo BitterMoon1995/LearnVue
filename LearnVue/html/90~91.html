@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>async&await</title>
+    <script src="../js/axios.js"></script>
+</head>
+<body>
+<script>
+    //async关键字会将其后的函数的返回值封装为一个promise对象
+    async function testAsync() {
+        return "hello async";
+    }
+    const result = testAsync();
+    console.log(result);
+
+    axios.defaults.baseURL = 'http://localhost:8080/evenstar/senorita/'
+
+    async function queryData() {
+        //如果await后接的是promise对象，它会阻塞后面的代码，直到该Promise对象resolve，
+        //然后得到resolve的值，作为await表达式的运算结果
+        return await axios.get('getById/aa')
+    }
+
+    queryData().then(data => {
+        console.log(data)
+    })
+
+    async function queryData0() {
+        return await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject("GG")
+            }, 1000)
+        })
+    }
+
+    queryData0().then(data => {
+        console.log(data)
+    })
+
+</script>
+</body>
+</html>

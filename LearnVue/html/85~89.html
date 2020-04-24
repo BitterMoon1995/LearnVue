@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Axios</title>
+    <script src="../js/axios.js"></script>
+</head>
+<body>
+<script>
+    //GET
+    //restful
+    axios.get('http://localhost:8080/evenstar/senorita/getById/a').then(result => {
+        console.log(result)
+        //请求数据
+        console.log(result.data)
+        //响应头
+        console.log(result.headers)
+        //响应状态码
+        console.log(result.status)
+        //响应状态信息
+        console.log(result.statusText)
+    })
+    //param
+    axios.get('http://localhost:8080/evenstar/senorita/getById', {
+        params: {
+            id: 'b'
+        }
+    }).then(result => {
+        console.log(result.data)
+        console.log(result)
+    })
+    //DELETE
+    //param
+    axios.delete('http://localhost:8080/evenstar/senorita/delById', {
+        params: {
+            id: 'd'
+        }
+    }).then(result => {
+        console.log(result.data)
+        console.log(result)
+    })
+
+    //★POST
+    //★JSON  直接就写键值对
+    // axios.post('http://localhost:8080/evenstar/senorita/add',
+    //     {
+    //         name: '兵龟',
+    //         age: 99,
+    //         info: '死妈废物老王八'
+    //     }).then(result => {
+    //     console.log(result.data)
+    // })
+
+    //★表单   通过对象
+    // const params=new FormData()
+    // params.append('name','兵老龟')
+    // params.append('age','99')
+    // params.append('info','死妈废物老王八')
+    // axios.post('http://localhost:8080/evenstar/senorita/addInForm',params)
+    //     .then(result=>{})
+
+    //PUT
+    // axios.put('http://localhost:8080/evenstar/senorita/update',
+    //     {
+    //         name: '兵龟',
+    //         age: 299,
+    //         info: '三台废物老王八'
+    //     }).then(res=>{})
+
+    //全局の配置
+    //配置请求地址前缀
+    axios.defaults.baseURL='http://localhost:8080/evenstar/senorita/'
+    //★配置请求头信息
+    axios.defaults.headers['mytoken']='TokenForSSO'
+    axios.get('getById/e').then(res=>{console.log(res.data)})
+
+    //拦截器
+    //1.★★请求拦截器
+    axios.interceptors.request.use(function (config) {
+        // console.log(config.url)
+        //通过请求拦截器按照条件给指定的请求设置token，比全局配置灵活13倍
+        if (config.url.indexOf('get')!==-1)
+            config.headers.thetoken='InterceptorTokenNiiiiiigger'
+        return config
+    },function (err) {
+        console.log(err)
+    })
+    axios.get('getById/c').then(res=>{console.log(res.data)})
+
+    //2.响应拦截器
+    // axios.interceptors.response.use(function (res) {
+    //     //通过响应拦截器从响应体中抽取data再返回，使之后的get请求能够得到真正的数据，不再需要.data
+    //     // return res.data
+    // },error => {})
+
+    //★★★单点登录
+    //后端设置、配置好响应头后，终于可以从响应体中拿到token
+    axios.get('getById/aa').then(res0=>{
+        let token=res0.headers.responsetoken
+        // console.log(token)
+        //将token存储到localstorage
+        localStorage.setItem('token',token)})
+    //从此以后可以随时从localStorage中拿到token并进行操作
+    console.log(localStorage.getItem('token'))
+
+
+</script>
+</body>
+</html>
