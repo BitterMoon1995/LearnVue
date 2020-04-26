@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态路由</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+<!--    路径参数-->
+    <router-link to="/user/1">User1</router-link>
+    <router-link to="/user/2">User2</router-link>
+<!--    组件传参-->
+    <router-link to="/vip/1">VIP1</router-link>
+    <router-link to="/vip/2">VIP2</router-link>
+<!--    命名路由-->
+    <router-link ></router-link>
+    <router-view></router-view>
+</div>
+<script>
+    let user = {
+        // 路由组件中通过$route.params获取路由参数   不推荐，耦合度高
+        // 推荐使用组件props传递参数
+        props: ['id'],
+        template: `
+            <div>
+                <h1>用户主页</h1>
+                <!--            <h3>用户id为：{{$route.params.id}}</h3>-->
+                <h3>用户id为：{{id}}</h3>
+            </div>`
+    }
+    let vip = {
+        // props接收对象数据
+        props: ['id','name','age'],
+        template: `
+            <div>
+                <h1>VIP主页</h1>
+                <!--            <h3>用户id为：{{$route.params.id}}</h3>-->
+                <h3>VIP姓名为： {{name}}</h3>
+                <h3>ID为：  {{id}}</h3>
+                <h3>年龄为：{{age}}</h3>
+            </div>`
+    }
+
+    let router = new VueRouter({
+        routes: [
+            {
+                // :xxx 获取同时定义路由参数
+                path: '/user/:id',
+                component: user,
+                //props设置为true，route.params就会被设置为组件的属性
+                props: true
+            },
+            {
+                path: '/',
+                redirect: '/user'
+            },
+            // {
+            //     //传对象则id访问不到
+            //     path: '/vip/:id',
+            //     component: vip,
+            //     //传对象数据
+            //     props: {
+            //         name:'死妈',
+            //         age:14
+            //     }
+            // }
+            {
+                //通过传函数返对象就可以得到路径参数
+                path: '/vip/:id',
+                component: vip,
+                //如果箭头函数返回的是对象，函数体用圆括号包裹
+                props: route=>(
+                    {
+                        name:'死妈',
+                        age:20,
+                        id:route.params.id
+                    }
+                )
+            }
+        ]
+    })
+    let app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        router
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue-Router基本の使用</title>
+    <script src="../js/vue.js"></script>
+    <!--    1.引入依赖-->
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--    2.添加路由链接-->
+    <router-link to="/user">User</router-link>
+    <router-link to="/register">Register</router-link>
+    <!--3.添加路由填充位-->
+    <router-view></router-view>
+</div>
+<script>
+    let user = {
+        template: `<h1>用户主页</h1>`
+    }
+    // 三.嵌套路由
+    // 在父路由组件放置子路由链接和填充位
+    let register = {
+        template: `
+        <div>
+            <h1>注册页</h1>
+            <hr>
+            <router-link to="/register/tab1">tab1</router-link>
+            <router-link to="/register/tab2">tab2</router-link>
+            <router-view></router-view>
+        </div>
+        `
+    }
+    let tab1 = {
+        template:`<h3>Tab1</h3>`
+    }
+    let tab2 = {
+        template:`<h3>Tab2</h3>`
+    }
+    //4.创建路由对象并配置路由规则
+    let router = new VueRouter({
+        routes: [
+            // 路由规则 路径-组件
+            {
+                path: '/user',
+                //component只接收组件对象不接收字符串
+                component: user
+            },
+            {
+                path: '/register',
+                component: register,
+                //定义子路由规则
+                children:[
+                    {
+                        path:'/register/tab1',
+                        component:tab1
+                    },
+                    {
+                        path:'/register/tab2',
+                        component:tab2
+                    }
+                ]
+            },
+            //二：重定向 原地址-新地址
+            {
+                //把打开网站的根目录直接重定向到user页面
+                path: '/',
+                redirect: '/user'
+            }
+        ]
+    })
+    let app = new Vue({
+        el: '#app',
+        data: {},
+        methods: {},
+        //5.将路由实例挂在到Vue实例上
+        router
+    })
+
+</script>
+</body>
+</html>

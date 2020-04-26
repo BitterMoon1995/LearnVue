@@ -7,37 +7,34 @@
 </head>
 <body>
 <script>
-    //async关键字会将其后的函数的返回值封装为一个promise对象
-    async function testAsync() {
-        return "hello async";
-    }
-    const result = testAsync();
-    console.log(result);
-
-    axios.defaults.baseURL = 'http://localhost:8080/evenstar/senorita/'
-
-    async function queryData() {
-        //如果await后接的是promise对象，它会阻塞后面的代码，直到该Promise对象resolve，
-        //然后得到resolve的值，作为await表达式的运算结果
-        return await axios.get('getById/aa')
-    }
-
-    queryData().then(data => {
-        console.log(data)
-    })
-
-    async function queryData0() {
+    //async关键字总会将其后的函数的返回值封装为一个promise对象
+    async function test() {
         return await new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject("GG")
-            }, 1000)
+            setTimeout(resolve, 2000)
         })
     }
 
-    queryData0().then(data => {
-        console.log(data)
-    })
+    async function test0(){
+        console.log('开始执行',new Date().toTimeString())
+        //如果await后接普通函数，它的返回值就是函数的返回值
+        //如果await后接的是promise对象，它会阻塞后面的代码，直到该Promise对象resolve，
+        //然后得到resolve的值，封装成promise对象，作为await表达式的运算结果
+        //如果reject，会报错并抛出reject的信息
+        await test()
+        console.log('执行结束',new Date().toTimeString())
+    }
+    test0()
 
+    //★★链式处理多个异步任务，将第一个请求的结果作为第二个请求的参数
+    async function linkedQuery() {
+        let info = await axios.get('getById/aa')
+        let data=info.data
+        data.id='z'
+        data.name='湖中仙女'
+        let obj = {...data}
+        return await axios.post('/add', obj)
+    }
+    linkedQuery().then(result=>console.log(result))
 </script>
 </body>
 </html>
