@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Promise</title>
+		<script src="../js/vue.js"></script>
+		<script src="../js/jquery-3.5.0.js"></script>
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<script>
+		//1.Promise是一个函数
+			// console.log(typeof(Promise))
+			console.dir(Promise)
+			
+		//2.AJAX then级联
+			function queryData(params) {
+				return new Promise((resolve, reject) =>  {
+					$.ajax({
+						...params,
+
+						success: function(result) {
+							//根据需求对应修改promise的状态
+							resolve(result) //修改promise对象的状态的为成功
+						},
+						error:function(error){
+							reject(error)
+						}
+					})
+				})
+			}
+			queryData({
+				url: 'http://localhost:8080/evenstar/senorita/list'
+			})
+			.then(data => {
+				console.log(data[0].name)
+				//then级联，必须在每一个then最后返回本promise对象
+				return queryData({url: 'http://localhost:8080/evenstar/senorita/list'})
+			})
+			//如果上一个then返回的是promise对象
+			//则下一个then的调用者就是上一个then返回的promise对象	
+			.then(data => {
+				console.log(data[1].name)
+				return data[1]
+			})
+			//如果上一个then返回的是普通值
+			//则该值会直接传递给下一个then，通过形参接收
+			.then(data=>{
+				console.log(data.info)
+			})
+		
+		//3.catch&finally 还有then,都是(显式)原型方法，也就是实例对象的方法
+			queryData({url: 'http://localhost:8080/evenstar/senorita/list'})
+			//then第一个参数函数用于接收resolve，第二个接收reject，只写一个就只接收resolve
+			//所以可以省略catch，把then的两个参数函数都写上
+			.then(data => {console.log('then-resolve')},data=> {console.log('then-reject')})
+			//catch只能接收reject传递的信息
+			.catch(data => {console.log('catch')})
+			//finally总会触发
+			.finally(data => {console.log('finished')})
+			
+		//4.all&race 为Promise类方法
+		
+			//all:所有任务完成才能得到结果。结果的顺序可以保证与编码一致
+			let a = queryData({url: 'http://localhost:8080/evenstar/senorita/getById/a'})
+			let b = queryData({url: 'http://localhost:8080/evenstar/senorita/getById/b'})
+			let c = queryData({url: 'http://localhost:8080/evenstar/senorita/getById/c'})
+			Promise.all([a,b,c]).then(result=>console.log(result))
+			
+			//race:哪个结果获得的快，就返回那个结果，不管结果本身是成功状态还是失败状态。
+			let a2 = queryData({url: 'http://localhost:8080/evenstar/senorita/getById/c'})
+			let b2 = queryData({url: 'http://localhost:8080/evenstar/senorita/getById/b'})
+			//使其中一个请求失败
+			let c2 = queryData({url: 'http://localhost:8080/evenstar/senorita/getById/a'})
+			Promise.race([a2,b2,c2]).then(result=>console.log(result))
+		</script>
+	</body>
+</html>

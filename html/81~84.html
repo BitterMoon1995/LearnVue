@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Fetch</title>
+		<script src="../js/vue.js"></script>
+		<style type="text/css"></style>
+	</head>
+	<body>
+		<script>
+		//基本操作	get请求
+			fetch('http://localhost:8080/evenstar/senorita/getById/a',{
+				method:'get',//默认就是get方法
+				mode: 'cors'
+			})
+			.then(function (data) {
+				//data.text()为一个promise对象
+				//会将响应体处理成字符串类型
+				return data.text()
+			})
+			.then(function (data) {
+				//只能得到string，无法通过对象.的方式搞来搞去
+				console.log(data)
+				console.log(typeof data)
+				//通过JSON api转化成对象，再搞
+				let obj=JSON.parse(data)
+				console.log(obj.info)
+			})
+
+		// 配置选项	post请求
+			fetch('http://localhost:8080/evenstar/senorita/add', {
+				method:'post',
+				mode: 'cors',
+				// body:'{"id":"d","name":"兵龟","age":99,"info":"死妈废物老王八"}',
+				body: JSON.stringify(
+					{
+						id:"d",
+						name:"兵龟",
+						age:99,
+						info:"死妈废物老王八"
+					}
+				),
+				headers:{
+					'Content-Type': 'application/json;charset=UTF-8'
+				}
+			})
+			.then(function (data) {
+				return data.text()
+			})
+			.then(function (data) {
+				console.log(data)
+			})
+
+		//响应格式
+			fetch('http://localhost:8080/evenstar/senorita/list',{
+				method:'get',//默认就是get方法
+				mode: 'cors'
+			})
+			.then(function (data) {
+				//.json就可以在第一个then将响应体处理成json
+				return data.json()
+			})
+			.then(function (data) {
+				console.log(data)
+				console.log(data[0])
+				console.log(typeof data)
+			})
+		</script>
+	</body>
+</html>

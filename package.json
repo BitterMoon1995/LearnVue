@@ -1,0 +1,32 @@
+{
+  "name": "learnvue",
+  "version": "1.0.0",
+  "description": "草他妈",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-node": "0.0.1-security",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jquery": "^3.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BitterMoon1995/LearnVue.git"
+  },
+  "keywords": [
+    "52meiqun"
+  ],
+  "author": "周薇儿",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BitterMoon1995/LearnVue/issues"
+  },
+  "homepage": "https://github.com/BitterMoon1995/LearnVue#readme"
+}

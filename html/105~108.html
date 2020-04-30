@@ -15,8 +15,9 @@
     <router-link to="/vip/1">VIP1</router-link>
     <router-link to="/vip/2">VIP2</router-link>
 <!--    命名路由-->
-    <router-link ></router-link>
+    <router-link :to="{name:'girl',params:{id:18}}">Girl1</router-link>
     <router-view></router-view>
+
 </div>
 <script>
     let user = {
@@ -40,7 +41,36 @@
                 <h3>VIP姓名为： {{name}}</h3>
                 <h3>ID为：  {{id}}</h3>
                 <h3>年龄为：{{age}}</h3>
-            </div>`
+                <button @click="goGirl">跳转到仙女页面</button>
+            </div>`,
+        //  编   程   式   导   航
+        methods: {
+            goGirl(){
+                // this.$router.push('/girl/22')
+                this.$router.push({
+                    name:'girl',
+                    params:{
+                        id:22
+                    }
+                })
+            }
+        }
+    }
+    let girl = {
+        props: ['id','name','age'],
+        template: `
+            <div>
+                <h1>仙女主页</h1>
+                <h3>仙女姓名为： {{name}}</h3>
+                <h3>ID为：  {{id}}</h3>
+                <h3>年龄为：{{age}}</h3>
+                <button @click="goBack">后退</button>
+            </div>`,
+        methods:{
+            goBack(){
+                this.$router.go(-1)
+            }
+        }
     }
 
     let router = new VueRouter({
@@ -70,12 +100,24 @@
                 //通过传函数返对象就可以得到路径参数
                 path: '/vip/:id',
                 component: vip,
-                //如果箭头函数返回的是对象，函数体用圆括号包裹
                 props: route=>(
                     {
                         name:'死妈',
                         age:20,
                         id:route.params.id
+                    }
+                )
+                //如果箭头函数返回的是对象，函数体用圆括号包裹
+            },
+            {
+                name:'girl',
+                path: '/girl/:id',
+                component: girl,
+                props: route => (
+                    {
+                        name: '仙女美裙',
+                        age: 18,
+                        id: route.params.id
                     }
                 )
             }

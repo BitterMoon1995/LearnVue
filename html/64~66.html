@@ -48,7 +48,6 @@
 				template:`
 					<div>
 						<strong>ERROR:</strong>
-						<!-- 插槽 -->
 						<slot>默认数据</slot>
 					</div>
 				`
@@ -73,12 +72,12 @@
 				`
 			})
 			// 作用域插槽
+			// 通过slot标签中绑定自定义属性传数据给父组件，属性的值就是要传递的数据
 			Vue.component('fruits',{
 				props:['list'],
 				template:`
 					<ul>
 						<li v-for="item in list" :key=item.id>
-						<!--通过slot标签中绑定自定义属性传数据给父组件，属性的值就是要传递的数据-->
 							<slot :subData='item'>{{item.name}}</slot>
 						</li>
 					</ul>
