@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<!--    父向子：子组件监听组件改变事件（@change），该事件发生后向父组件抛出自定义事件：intro，第二个参数为要传递的数据-->
+<!--    父组件监听intro事件，并在事件参数中用$event接收传来的数据，-->
+<!--    父组件再定义intro事件的处理函数，通过函数形参成功将数据传递到父组件model区-->
 	<head>
 		<meta charset="utf-8">
 		<title>组件数据交互</title>
@@ -15,7 +18,7 @@
 			<br />
 			<son-nigger v-bind:title="title"></son-nigger>
 			<br />
-			
+
 			<!-- 传递数值类型 -->
 			<son-nigger v-bind:num='num'></son-nigger>
 			<br />
@@ -23,19 +26,19 @@
 			<br />
 			<son-nigger v-bind:girl='girl'></son-nigger>
 			<br />
-			
+
 			<!-- 父组件实现子组件的自定义事件，通过$event接收$emit抛出的数据(子向父) -->
 		<!-- 	在原生事件中，$event是事件对象
 			在自定义事件中，$event是传递过来的数据 -->
 			<the-fruits :fruits='fruits' @expand='expand($event)' :style="{fontSize:fontSize+'px'}"></the-fruits>
-			
+
 			<!-- 兄弟组件通信 -->
 			<old-brother></old-brother>
 			<young-brother></young-brother>
 			<br />
 			<div><button @click='destroy'>销毁事件</button></div>
 		</div>
-		
+
 		<script>
 			Vue.component('son-nigger', {
 				// 子组件通过props接受数据
@@ -54,7 +57,7 @@
 					</div>
 				`
 			})
-			
+
 			//子组件通过自定义事件向父组件传递数据-->
 			//$emit:写在子组件，用于触发父组件的事件
 			//第一个参数指定要触发的当前实例的事件，
@@ -70,7 +73,7 @@
 					</div>
 				`
 			})
-			
+
 			//兄弟组件通过公共的组件中心传值
 			Vue.component('old-brother',{
 				data:function(){
@@ -122,9 +125,9 @@
 				}
 			})
 			var eventCenter=new Vue({
-				
+
 			})
-			
+
 			var app = new Vue({
 				el: '#app',
 				data: {

@@ -6,7 +6,7 @@
 		<script src="../js/vue.js"></script>
 		<style type="text/css">
 			.current{
-				color: #B10724;
+				color: #b10724;
 			}
 		</style>
 	</head>
@@ -33,16 +33,18 @@
 			<br />
 			<!-- 作用域插槽  父组件通过slot-scope获取子组件数据并进行处理-->
 			<fruits :list='list'>
-				<template slot-scope='godz'>
-					<strong v-if="godz.subData.id===2" class="current">
-						{{godz.subData.name}}
+<!--				slot-scope的值可以是任意的-->
+<!--				！！！slot-scope在V3中将被废弃，代以v-slot！！！-->
+				<template v-slot='simaNigger'>
+					<strong v-if="simaNigger.subData.id===2" class="current">
+						{{'作用域插槽'+simaNigger.subData.name}}
 					</strong>
-					<strong v-else>{{godz.subData.name}}</strong>
+					<strong v-else>{{'作用域插槽擦擦'+simaNigger.subData.name}}</strong>
 				</template>
 			</fruits>
 		</div>
-		
-		
+
+
 		<script>
 			Vue.component('the-fairy',{
 				template:`
@@ -83,7 +85,7 @@
 					</ul>
 				`
 			})
-			
+
 			var app = new Vue({
 				el: '#app',
 				data: {
